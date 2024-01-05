@@ -11,12 +11,12 @@ enum STATUS_CODE
     ON_SUCCESS,
 };
 /*****************************静态函数声明*************************************/
-static int checkList(AddressBook *pList);
+static int checkBook(AddressBook *addrBook);
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos);
 /*****************************静态函数实现*************************************/
-static int checkList(AddressBook *pList)
+static int checkBook(AddressBook *addrBook)
 {
-    if (pList == NULL)
+    if (addrBook == NULL)
     {
         return NULL_PTR;
     }
@@ -24,7 +24,7 @@ static int checkList(AddressBook *pList)
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos)
 {
     /*尾插添加联系人，默认在通讯录末尾*/
-    checkList(addrBook);
+    checkBook(addrBook);
     /*为新节点开辟空间*/
     BookNode *newNode = calloc(1, sizeof(BookNode));
     /*判空*/
@@ -115,6 +115,14 @@ int addressBookSort(AddressBook *addrBook)
 /*打印通讯录*/
 void addressBookPrint(AddressBook *addrBook)
 {
+    checkBook(addrBook);
+    BookNode *travelNdoe = addrBook->head->next;
+    while (travelNdoe != NULL)
+    {
+        printf("name=%s\nsex=%c\nage=%d\nphone=%s\naddrs=%s", travelNdoe->person->name, travelNdoe->person->sex, travelNdoe->person->age, travelNdoe->person->phone, travelNdoe->person->addrs);
+        travelNdoe = travelNdoe->next;
+    }
+    printf("\n");
 }
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook)
