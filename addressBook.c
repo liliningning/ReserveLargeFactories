@@ -32,12 +32,19 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
     {
         return CALLLOC_ERROR;
     }
+    newNode->person = calloc(1, sizeof(PersonData));
+    /*判空*/
+    if (newNode->person == NULL)
+    {
+        return CALLLOC_ERROR;
+    }
+
     /*维护新节点*/
-    newNode->person->addrs = person.addrs;
-    newNode->person->age = person.age;
-    newNode->person->name = person.name;
-    newNode->person->phone = person.phone;
+    strncpy(newNode->person->addrs, person.addrs, sizeof(char) * (strlen(person.addrs) + 1));
+    strncpy(newNode->person->name, person.name, sizeof(char) * (strlen(person.name) + 1));
+    strncpy(newNode->person->phone, person.phone, sizeof(char) * (strlen(person.phone) + 1));
     newNode->person->sex = person.sex;
+    newNode->person->age = person.age;
     newNode->next = NULL;
     newNode->prev = NULL;
     if (pos < 0 || pos > addrBook->len)
@@ -45,7 +52,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
         return INVALID_POS;
     }
     BookNode *travelNode = addrBook->head;
-    for (int idx = 0; idx < pos; idx++)
+    for (int idx = 0; idx < pos && travelNode != NULL; idx++)
     {
         travelNode = travelNode->next;
     }
@@ -67,9 +74,9 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
 int addressBookInit(AddressBook **addrBook)
 {
     AddressBook *adBook = calloc(1, sizeof(AddressBook));
-    if (adBook == CALLLOC_ERROR)
+    if (adBook == NULL)
     {
-        return NULL_PTR;
+        return CALLLOC_ERROR;
     }
     adBook->head = calloc(1, sizeof(BookNode));
     if (adBook->head == NULL)
@@ -77,6 +84,7 @@ int addressBookInit(AddressBook **addrBook)
         return CALLLOC_ERROR;
     }
     adBook->len = 0;
+    adBook->head->person = NULL;
     adBook->head->next = NULL;
     adBook->head->prev = adBook->head;
     /*解应用*/
