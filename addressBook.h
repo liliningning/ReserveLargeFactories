@@ -13,17 +13,17 @@ typedef struct PersonData
 } PersonData;
 
 /*结点信息*/
-typedef struct DoubleListNode
+typedef struct BookNode
 {
     PersonData *person;
-    struct DoubleListNode *next;
-    struct DoubleListNode *prev;
-} DoubleListNode;
+    struct BookNode *next;
+    struct BookNode *prev;
+} BookNode;
 
 /*双链表存储信息*/
 typedef struct AddressBook
 {
-    DoubleListNode *head;
+    BookNode *head;
     int len;
 } AddressBook;
 /********************************分割线************************************/
