@@ -14,8 +14,12 @@ int main()
     addressBookAddPerson(book, newPerson2);
     addressBookPrint(book);
 
-    printf("delete person an\n");
-    addressBookDeletePerson(book, "anzhenyu");
-    addressBookPrint(book);
+    // printf("delete person an\n");
+    // addressBookDeletePerson(book, "anzhenyu");
+    // addressBookPrint(book);
+
+    char *zhenyuPhone = addressBookSeekPhone(book, "anzhenyu");
+    printf("zhenyuPhone=%s\n", zhenyuPhone);
+
     return 0;
 }

@@ -12,8 +12,14 @@ enum STATUS_CODE
 };
 /*****************************静态函数声明*************************************/
 static int checkBook(AddressBook *addrBook);
+/*根据位置找联系人*/
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos);
+/*删除当前结点*/
 static int deleteCurrentNode(BookNode *deleteNode);
+/*根据名字找到该人所在的节点*/
+static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name);
+/*交换节点*/
+static int swapNode(BookNode *preNode, BookNode *postNode);
 /*****************************静态函数实现*************************************/
 static int checkBook(AddressBook *addrBook)
 {
@@ -89,6 +95,22 @@ static int deleteCurrentNode(BookNode *deleteNode)
         deleteNode = NULL;
     }
 }
+static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name)
+{
+    BookNode *travleNode = addrBook->head->next;
+    while (travleNode != NULL && strcmp(travleNode->person->name, name) != 0)
+    {
+        travleNode = travleNode->next;
+    }
+    if (travleNode == NULL)
+    {
+        return NULL;
+    }
+    return travleNode;
+}
+static int swapNode(BookNode *preNode, BookNode *postNode)
+{
+}
 /*****************************分割线*************************************/
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook)
@@ -119,29 +141,22 @@ int addressBookAddPerson(AddressBook *addrBook, PersonData person)
 /*根据名字删除联系人*/
 int addressBookDeletePerson(AddressBook *addrBook, char *name)
 {
-    checkBook(addrBook);
-    BookNode *travelNode = addrBook->head->next;
-    while (travelNode != NULL && strcmp(travelNode->person->name, name) != 0)
-    {
-        travelNode = travelNode->next;
-    }
-    /*退出循环，找到了||找完了都没有*/
-    if (travelNode == NULL)
-    {
-        return INVALID_NAME;
-    }
-    else
-    {
-        deleteCurrentNode(travelNode);
-    }
+    BookNode *personNode = baseNameSeekPerson(addrBook, name);
+    deleteCurrentNode(personNode);
+
     return ON_SUCCESS;
 }
 /*通过名字查找电话号码*/
-int addressBookSeekPhone(AddressBook *addrBook, char *name)
+char *addressBookSeekPhone(AddressBook *addrBook, char *name)
 {
+    checkBook(addrBook);
+    BookNode *personNode = baseNameSeekPerson(addrBook, name);
+    char *ret = calloc(BUFFER_SIZE, sizeof(char));
+    strncpy(ret, personNode->person->phone, sizeof(ret) - 1);
+    return ret;
 }
 /*修改某人信息*/
-int addressBookModify(AddressBook *addrBook, char *name)
+int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 {
 }
 /*按照名字给通讯录联系人排序*/
