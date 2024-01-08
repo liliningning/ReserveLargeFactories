@@ -24,36 +24,43 @@ void menu()
 
 
 int main()
-{
+{ 
+    
     /* 初始化 */
     AddressBook *book = NULL;
     addressBookInit(&book);
 
+   
     int choice = 0;
+     menu();
     printf("请输入你的选项: \n");
     scanf("%d", &choice);
-
+   
     switch(choice)
     {
     case ADD:
     {
-        addressBookAddPerson(&book,);
+        // addressBookAddPerson(&book,);
         break;
     }
     case SEEK:
-    {
+    {   
+
         break;
     }
     case MODIFY:
     {
+
         break;
     }
     case DELETE:
     {
+
         break;
     }
     case SAVE:
     {
+
         break;
     }
 

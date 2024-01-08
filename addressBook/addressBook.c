@@ -11,10 +11,21 @@ enum STATUS_CODE
     ON_SUCCESS,
 };
 /*****************************静态函数声明*************************************/
+/* 判空*/
 static int checkBook(AddressBook *addrBook);
+
+/* 添加联系人 */
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos);
+/* 删除结点 */
 static int deleteCurrentNode(BookNode *deleteNode);
+
+/*根据名字找到该人所在的节点*/
+static BookNode * baseNameSeekPerson (AddressBook *addrBook, char *name);
+
+
+
 /*****************************静态函数实现*************************************/
+/* 判空*/
 static int checkBook(AddressBook *addrBook)
 {
     if (addrBook == NULL)
@@ -22,6 +33,7 @@ static int checkBook(AddressBook *addrBook)
         return NULL_PTR;
     }
 }
+/*  添加联系人 */
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos)
 {
     /*尾插添加联系人，默认在通讯录末尾*/
@@ -71,6 +83,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
 
     /*长度增加*/
     addrBook->len++;
+    printf("新增联系人成功！\n");
     return ON_SUCCESS;
 }
 /*删除当前结点*/
@@ -81,6 +94,7 @@ static int deleteCurrentNode(BookNode *deleteNode)
     if (deleteNode->next != NULL)
     {
         deleteNode->next->prev = preDeleteNode;
+
     }
 
     if (deleteNode != NULL)
@@ -88,6 +102,22 @@ static int deleteCurrentNode(BookNode *deleteNode)
         free(deleteNode);
         deleteNode = NULL;
     }
+}
+
+
+/*根据名字找到该人所在的节点*/
+static BookNode * baseNameSeekPerson(AddressBook *addrBook, char *name)
+{
+     BookNode *travleNode = addrBook->head->next;
+    while (travleNode != NULL && strcmp(travleNode->person->name, name) != 0)
+    {
+        travleNode = travleNode->next;
+    }
+    if (travleNode == NULL)
+    {
+        return NULL;
+    }
+    return travleNode;
 }
 
 /*****************************分割线*************************************/
@@ -115,6 +145,11 @@ int addressBookInit(AddressBook **addrBook)
 int addressBookAddPerson(AddressBook *addrBook, PersonData person)
 {
     return addressBookPosAddPerson(addrBook, person, addrBook->len);
+    printf("姓名：\n");
+    scanf("%s", BookNode->person->name);
+    printf("性别: \n");
+    scanf("%s",person);
+
 }
 
 /*根据名字删除联系人*/
@@ -122,6 +157,8 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name)
 {
     checkBook(addrBook);
     BookNode *travelNode = addrBook->head->next;
+    printf("请输入要删除的人的姓名：\n");
+    scanf("%s", name);
     while (travelNode != NULL && strcmp(travelNode->person->name, name) != 0)
     {
         travelNode = travelNode->next;
@@ -129,39 +166,55 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name)
     /*退出循环，找到了||找完了都没有*/
     if (travelNode == NULL)
     {
+        
+        printf("联系人不存在 ! \n");
         return INVALID_NAME;
     }
     else
     {
         deleteCurrentNode(travelNode);
     }
+    printf("删除联系人成功 ! \n");
+
     return ON_SUCCESS;
 }
 /*通过名字查找电话号码*/
 int addressBookSeekPhone(AddressBook *addrBook, char *name)
 {
+       printf("要查找人的姓名：\n");
+       scanf("%s",name); 
+       BookNode * node = baseNameSeekPerson(addrBook, name);
+       if(node == NULL)
+       {
+            printf("要查找的人不存在 !\n");
+       }
+       else
+       {
+            printf("%-20s\t%-4s\t%-5s\t%-12s\t%-20s\n", "名字", "性别","年龄", "电话", "地址");
+       }
+
 }
 /*修改某人信息*/
 int addressBookModify(AddressBook *addrBook, char *name)
 {
+
 }
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
 {
-    if (addrBook == NULL)
-    {
-        return NULL_PTR;
-    }
+    checkBook(addrBook);
     BookNode *newNode = addrBook->head->next;
     BookNode *travelNode = newNode->next;
     int ret = 0;
     while (travelNode->next != NULL)
     {
+        /* 比较两个姓名 */
         ret = strcmp(newNode->person->name, travelNode->person->name);
         if (ret <= 0)
         {
             break;
         }
+        /*交换结点 */
         else if (ret > 0)
         {
             newNode->prev->next = travelNode;
@@ -172,8 +225,10 @@ int addressBookSort(AddressBook *addrBook)
             newNode->prev = travelNode;
         }
     }
+    /* 结点后移 */
     newNode = newNode->next;
     travelNode = travelNode->next;
+    return ON_SUCCESS;
 }
 /*打印通讯录*/
 void addressBookPrint(AddressBook *addrBook)
@@ -196,4 +251,21 @@ void addressBookPrint(AddressBook *addrBook)
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook)
 {
+    if(addrBook == NULL)
+    {
+        return NULL_PTR;
+    }
+    /* 头结点不为空 */
+    if(addrBook->head != NULL)
+    {
+        free(addrBook->head);
+        addrBook->head = NULL;
+    }
+    /* 链表不为空 */
+    if(addrBook != NULL)
+    {
+        free(addrBook);
+        addrBook = NULL;
+    }
+    return ON_SUCCESS;
 }
