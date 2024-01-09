@@ -4,72 +4,78 @@
 enum STATUS_CODE
 {
     ADD = 1,
-    SEEK = 2,
-    MODIFY = 3,
-    DELETE = 4,
-    SAVE = 5,
+    SEEK,
+    MODIFY,
+    DELETE,
+    SAVE,
+    DERTRUCTION,
 
 };
 
 void menu()
 {
-     printf("                       \n");
+    printf("                       \n");
     printf("    1:添加联系人         \n");
     printf("    2:查找联系人         \n");
     printf("    3:修改联系人         \n");
     printf("    4:删除联系人         \n");
     printf("    5:保存联系人         \n");
+    printf("    6:销毁通讯录         \n");
     printf("                        \n");
 }
 
-
 int main()
-{ 
-    
+{
+
     /* 初始化 */
     AddressBook *book = NULL;
     addressBookInit(&book);
 
-   
+    char *name = NULL;
+    PersonData newpson = {0};
     int choice = 0;
-     menu();
-    printf("请输入你的选项: \n");
-    scanf("%d", &choice);
-   
-    switch(choice)
-    {
-    case ADD:
-    {
-        // addressBookAddPerson(&book,);
-        break;
-    }
-    case SEEK:
-    {   
 
-        break;
-    }
-    case MODIFY:
+    do
     {
 
-        break;
-    }
-    case DELETE:
-    {
+        menu();
+        printf("请输入你的选项: \n");
+        scanf("%d", &choice);
 
-        break;
-    }
-    case SAVE:
-    {
+        switch (choice)
+        {
+        case ADD:
+        {
+            addressBookAddPerson(book, newpson);
+            break;
+        }
+        case SEEK:
+        {
+            addressBookSeekPhone(book, name);
+            break;
+        }
+        case MODIFY:
+        {
+            addressBookModify(book, name);
+            break;
+        }
+        case DELETE:
+        {
+            addressBookDeletePerson(book, name);
+            break;
+        }
+        case SAVE:
+        {
 
-        break;
-    }
-
-    }
-
-
-
-
-
+            break;
+        }
+        case DERTRUCTION:
+        {
+            ruinAddressBook(book);
+            break;
+        }
+        }
+    }while(choice);
 
 
 

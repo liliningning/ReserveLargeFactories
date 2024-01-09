@@ -22,9 +22,10 @@ static int deleteCurrentNode(BookNode *deleteNode);
 /*根据名字找到该人所在的节点*/
 static BookNode * baseNameSeekPerson (AddressBook *addrBook, char *name);
 
-
+static void quicksort(AddressBook array, int num1, int num2);
 
 /*****************************静态函数实现*************************************/
+
 /* 判空*/
 static int checkBook(AddressBook *addrBook)
 {
@@ -33,6 +34,7 @@ static int checkBook(AddressBook *addrBook)
         return NULL_PTR;
     }
 }
+
 /*  添加联系人 */
 static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos)
 {
@@ -53,6 +55,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
     }
 
     /*维护新节点*/
+
     strncpy(newNode->person->addrs, person.addrs, sizeof(newNode->person->addrs) - 1);
     // newNode->person->addrs[sizeof(newNode->person->addrs) - 1] = '\0';
     strncpy(newNode->person->name, person.name, sizeof(newNode->person->name) - 1);
@@ -86,6 +89,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
     printf("新增联系人成功！\n");
     return ON_SUCCESS;
 }
+
 /*删除当前结点*/
 static int deleteCurrentNode(BookNode *deleteNode)
 {
@@ -120,6 +124,8 @@ static BookNode * baseNameSeekPerson(AddressBook *addrBook, char *name)
     return travleNode;
 }
 
+
+
 /*****************************分割线*************************************/
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook)
@@ -145,10 +151,7 @@ int addressBookInit(AddressBook **addrBook)
 int addressBookAddPerson(AddressBook *addrBook, PersonData person)
 {
     return addressBookPosAddPerson(addrBook, person, addrBook->len);
-    printf("姓名：\n");
-    scanf("%s", BookNode->person->name);
-    printf("性别: \n");
-    scanf("%s",person);
+
 
 }
 
@@ -197,6 +200,9 @@ int addressBookSeekPhone(AddressBook *addrBook, char *name)
 /*修改某人信息*/
 int addressBookModify(AddressBook *addrBook, char *name)
 {
+    printf("输入修改的姓名: \n");
+    scanf("%s", name);
+    
 
 }
 /*按照名字给通讯录联系人排序*/
@@ -267,5 +273,6 @@ int ruinAddressBook(AddressBook *addrBook)
         free(addrBook);
         addrBook = NULL;
     }
+    printf("销毁通讯录成功！\n");
     return ON_SUCCESS;
 }
