@@ -13,17 +13,17 @@ typedef struct PersonData
 } PersonData;
 
 /*结点信息*/
-typedef struct DoubleListNode
+typedef struct BookNode
 {
     PersonData *person;
-    struct DoubleListNode *next;
-    struct DoubleListNode *prev;
-} DoubleListNode;
+    struct BookNode *next;
+    struct BookNode *prev;
+} BookNode;
 
 /*双链表存储信息*/
 typedef struct AddressBook
 {
-    DoubleListNode *head;
+    BookNode *head;
     int len;
 } AddressBook;
 /********************************分割线************************************/
@@ -36,7 +36,7 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name);
 /*通过名字查找电话号码*/
 int addressBookSeekPhone(AddressBook *addrBook, char *name);
 /*修改某人信息*/
-int addressBookModify(AddressBook *addrBook, char *name);
+int addressBookModify(AddressBook *addrBook, char *name, PersonData person);
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook);
 /*打印通讯录*/
