@@ -1,5 +1,6 @@
 #include "addressBook.h"
 #include <stdio.h>
+#include <string.h>
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook)
 {
@@ -19,8 +20,11 @@ int addressBookSeekPhone(AddressBook *addrBook, char *name)
 /*修改某人信息*/
 int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 {
-    int ret = 0;//默认返回修改
-     BookNode *travePoint = addrBook->head;
+    int ret = 0; // 默认返回修改
+
+    printf("请输入要修改人的名字!\n");
+    scanf("%s", name);
+    BookNode *travePoint = addrBook->head;
     while (travePoint != NULL)
     {
         if (strcmp(travePoint->person->name, name) == 0)
@@ -30,14 +34,12 @@ int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
             travePoint->person->age = person.age;
             strcpy(travePoint->person->phone, person.phone);
             strcpy(travePoint->person->addrs, person.addrs);
-            return 1; 
+            return 1;
         }
         travePoint = travePoint->next;
-        
     }
-    
+    printf("修改成功!\n");
     return ret;
-    
 }
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
