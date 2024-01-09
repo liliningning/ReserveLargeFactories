@@ -14,14 +14,17 @@ enum STATUS_CODE
 
 void menu()
 {
-    printf("                       \n");
+    printf("     ********************************                   \n");
+    printf("                        \n");
     printf("    1:添加联系人         \n");
     printf("    2:查找联系人         \n");
     printf("    3:修改联系人         \n");
     printf("    4:删除联系人         \n");
     printf("    5:保存联系人         \n");
     printf("    6:销毁通讯录         \n");
+    printf(" 7:推出")
     printf("                        \n");
+    printf("     ********************************                   \n");
 }
 
 int main()
