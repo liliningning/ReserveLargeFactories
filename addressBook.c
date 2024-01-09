@@ -19,8 +19,8 @@ static int addressBookPosAddPerson(AddressBook *addrBook, int pos);
 static int deleteCurrentNode(BookNode *deleteNode);
 /*根据名字找到该人所在的节点*/
 static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name);
-/*交换节点*/
-static int swapNode(AddressBook *addrBook, BookNode *preNode, BookNode *postNode);
+/*交换数据*/
+static int swapPersonData(PersonData *man1, PersonData *man2);
 /*****************************静态函数实现*************************************/
 static int checkBook(AddressBook *addrBook)
 {
@@ -119,32 +119,24 @@ static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name)
     return travleNode;
 }
 #if 1
-static int swapNode(AddressBook *addrBook, BookNode *preNode, BookNode *postNode)
+static int swapPersonData(PersonData *man1, PersonData *man2)
 {
-    if (preNode == NULL || postNode == NULL)
-    {
-        return INVALID_SWAP;
-    }
-    // 更新前后节点的前后指针
-    BookNode *prePrev = preNode->prev;   // head
-    BookNode *postNext = postNode->next; // null
-
-    preNode->prev = postNode;
-    preNode->next = postNext;
-    postNode->next = preNode;
-    postNode->prev = prePrev;
-
-    if (prePrev == addrBook->head)
-    {
-        addrBook->head = postNode;
-    }
-    if (postNext != NULL)
-    {
-        postNext->prev = preNode;
-    }
+    PersonData temp = *man1;
+    *man1 = *man2;
+    *man2 = temp;
     return ON_SUCCESS;
 }
 #endif
+static PersonData *basePosGetNode(AddressBook *addrBook, int pos)
+{
+    BookNode *travelNode = addrBook->head;
+
+    for (int idx = 0; idx <= pos; idx++)
+    {
+        travelNode = travelNode->next;
+    }
+    return travelNode->person;
+}
 /*****************************分割线*************************************/
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook)
@@ -193,10 +185,80 @@ char *addressBookSeekPhone(AddressBook *addrBook, char *name)
 int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 {
 }
+
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
 {
-    /*选择排序*/
+/*选择排序*/
+#if 0
+
+    BookNode *minIndex = addrBook->head;
+    for (BookNode *pos = addrBook->head->next; pos != NULL; pos = pos->next)
+    {
+        PersonData *minValue = pos->person;
+        for (BookNode *begin = pos->next; begin != NULL; begin = begin->next)
+        {
+            if (strcmp(minValue->name, begin->person->name) > 0)
+            {
+                memset(minValue->name, 0, sizeof(minValue->name));
+                strcpy(minValue->name, begin->person->name);
+                minIndex = begin;
+            }
+        }
+        if (strcmp(pos->person->name, minValue->name) < 0)
+        {
+            swapPersonData(pos->person, minValue);
+        }
+    }
+
+#endif
+#if 0
+    BookNode *minIndex = NULL;
+    for (BookNode *pos = addrBook->head; pos != NULL; pos = pos->next)
+    {
+        PersonData *minValue = pos->person;
+        minIndex = pos;
+        for (BookNode *begin = pos->next; begin != NULL; begin = begin->next)
+        {
+            if (strcmp(minValue->name, begin->person->name) > 0)
+            {
+                minValue = begin->person;
+                minIndex = begin;
+            }
+        }
+        if (minIndex != pos)
+        {
+            swapPersonData(pos->person, minIndex->person);
+        }
+    }
+#endif
+#if 0
+
+    for (int idx = 0; idx < addrBook->len - 1; idx++)
+    {
+        for (BookNode *jdx = addrBook->head->next->next; jdx->next != NULL; jdx = jdx->next)
+        {
+            if (strcmp(jdx->person->name, jdx->prev->person->name) > 0)
+            {
+                swapPersonData(jdx->person, jdx->prev->person);
+            }
+        }
+    }
+
+#endif
+#if 1
+    for (int idx = 0; idx < addrBook->len - 1; idx++)
+    {
+        for (BookNode *jdx = addrBook->head->next; jdx->next != NULL; jdx = jdx->next)
+        {
+            if (strcmp(jdx->person->name, jdx->next->person->name) > 0)
+            {
+                swapPersonData(jdx->person, jdx->next->person);
+            }
+        }
+    }
+#endif
+    return ON_SUCCESS;
 }
 /*打印通讯录*/
 void addressBookPrint(AddressBook *addrBook)

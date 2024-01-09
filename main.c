@@ -55,8 +55,11 @@ int main()
     AddressBook *book = NULL;
     addressBookInit(&book);
 
-    printf("add person an\n");
     addressBookAddPerson(book);
+    addressBookAddPerson(book);
+    addressBookAddPerson(book);
+    addressBookSort(book);
     addressBookPrint(book);
+
     return 0;
 }
