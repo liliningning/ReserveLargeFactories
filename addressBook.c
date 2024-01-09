@@ -4,22 +4,23 @@
 #include <string.h>
 enum STATUS_CODE
 {
-    CALLLOC_ERROR = -4,
+    CALLLOC_ERROR = -5,
     NULL_PTR,
     INVALID_NAME,
     INVALID_POS,
+    INVALID_SWAP,
     ON_SUCCESS,
 };
 /*****************************静态函数声明*************************************/
 static int checkBook(AddressBook *addrBook);
 /*根据位置找联系人*/
-static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos);
+static int addressBookPosAddPerson(AddressBook *addrBook, int pos);
 /*删除当前结点*/
 static int deleteCurrentNode(BookNode *deleteNode);
 /*根据名字找到该人所在的节点*/
 static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name);
 /*交换节点*/
-static int swapNode(BookNode *preNode, BookNode *postNode);
+static int swapNode(AddressBook *addrBook, BookNode *preNode, BookNode *postNode);
 /*****************************静态函数实现*************************************/
 static int checkBook(AddressBook *addrBook)
 {
@@ -28,7 +29,7 @@ static int checkBook(AddressBook *addrBook)
         return NULL_PTR;
     }
 }
-static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int pos)
+static int addressBookPosAddPerson(AddressBook *addrBook, int pos)
 {
     /*尾插添加联系人，默认在通讯录末尾*/
     checkBook(addrBook);
@@ -47,14 +48,22 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
     }
 
     /*维护新节点*/
-    strncpy(newNode->person->addrs, person.addrs, sizeof(newNode->person->addrs) - 1);
-    // newNode->person->addrs[sizeof(newNode->person->addrs) - 1] = '\0';
-    strncpy(newNode->person->name, person.name, sizeof(newNode->person->name) - 1);
-    // newNode->person->name[sizeof(newNode->person->name) - 1] = '\0';
-    strncpy(newNode->person->phone, person.phone, sizeof(newNode->person->phone) - 1);
-    // newNode->person->phone[sizeof(newNode->person->phone) - 1] = '\0';
-    newNode->person->sex = person.sex;
-    newNode->person->age = person.age;
+    printf("请输入姓名：\n");
+    scanf("%s", newNode->person->name);
+    getchar();
+
+    printf("请输入性别：\n");
+    scanf("%c", &newNode->person->sex);
+
+    printf("请输入年龄:\n");
+    scanf("%d", &newNode->person->age);
+
+    printf("请输入电话号码：\n");
+    scanf("%s", newNode->person->phone);
+
+    printf("请输入地址：\n");
+    scanf("%s", newNode->person->addrs);
+
     newNode->next = NULL;
     newNode->prev = NULL;
     if (pos < 0 || pos > addrBook->len)
@@ -67,8 +76,8 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
         travelNode = travelNode->next;
     }
     /*改变节点指针方向*/
-    newNode->next = travelNode->next;
     newNode->prev = travelNode;
+    newNode->next = travelNode->next;
     travelNode->next = newNode;
     if (travelNode->next != NULL)
     {
@@ -77,6 +86,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
 
     /*长度增加*/
     addrBook->len++;
+    printf("添加联系人成功\n");
     return ON_SUCCESS;
 }
 /*删除当前结点*/
@@ -108,9 +118,33 @@ static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name)
     }
     return travleNode;
 }
-static int swapNode(BookNode *preNode, BookNode *postNode)
+#if 1
+static int swapNode(AddressBook *addrBook, BookNode *preNode, BookNode *postNode)
 {
+    if (preNode == NULL || postNode == NULL)
+    {
+        return INVALID_SWAP;
+    }
+    // 更新前后节点的前后指针
+    BookNode *prePrev = preNode->prev;   // head
+    BookNode *postNext = postNode->next; // null
+
+    preNode->prev = postNode;
+    preNode->next = postNext;
+    postNode->next = preNode;
+    postNode->prev = prePrev;
+
+    if (prePrev == addrBook->head)
+    {
+        addrBook->head = postNode;
+    }
+    if (postNext != NULL)
+    {
+        postNext->prev = preNode;
+    }
+    return ON_SUCCESS;
 }
+#endif
 /*****************************分割线*************************************/
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook)
@@ -133,9 +167,9 @@ int addressBookInit(AddressBook **addrBook)
     *addrBook = adBook;
 }
 /*添加联系人*/
-int addressBookAddPerson(AddressBook *addrBook, PersonData person)
+int addressBookAddPerson(AddressBook *addrBook)
 {
-    return addressBookPosAddPerson(addrBook, person, addrBook->len);
+    return addressBookPosAddPerson(addrBook, addrBook->len);
 }
 
 /*根据名字删除联系人*/
@@ -162,6 +196,7 @@ int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
 {
+    /*选择排序*/
 }
 /*打印通讯录*/
 void addressBookPrint(AddressBook *addrBook)

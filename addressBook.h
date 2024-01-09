@@ -30,7 +30,7 @@ typedef struct AddressBook
 /*初始化通讯录*/
 int addressBookInit(AddressBook **addrBook);
 /*添加联系人*/
-int addressBookAddPerson(AddressBook *addrBook, PersonData person);
+int addressBookAddPerson(AddressBook *addrBook);
 /*根据名字删除联系人*/
 int addressBookDeletePerson(AddressBook *addrBook, char *name);
 /*通过名字查找电话号码*/
@@ -43,4 +43,5 @@ int addressBookSort(AddressBook *addrBook);
 void addressBookPrint(AddressBook *addrBook);
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook);
+
 #endif /*__ADDRESS_BOOK_H_*/
