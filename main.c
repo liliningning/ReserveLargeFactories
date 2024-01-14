@@ -57,8 +57,9 @@ int main()
 
     addressBookAddPerson(book);
     addressBookAddPerson(book);
-    addressBookAddPerson(book);
-    addressBookSort(book);
+    // addressBookAddPerson(book);
+    // addressBookSort(book);
+    addressBookDeletePerson(book);
     addressBookPrint(book);
 
     return 0;

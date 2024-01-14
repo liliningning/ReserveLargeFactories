@@ -32,7 +32,7 @@ int addressBookInit(AddressBook **addrBook);
 /*添加联系人*/
 int addressBookAddPerson(AddressBook *addrBook);
 /*根据名字删除联系人*/
-int addressBookDeletePerson(AddressBook *addrBook, char *name);
+int addressBookDeletePerson(AddressBook *addrBook);
 /*通过名字查找电话号码*/
 char *addressBookSeekPhone(AddressBook *addrBook, char *name);
 /*修改某人信息*/

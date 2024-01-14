@@ -165,8 +165,11 @@ int addressBookAddPerson(AddressBook *addrBook)
 }
 
 /*根据名字删除联系人*/
-int addressBookDeletePerson(AddressBook *addrBook, char *name)
+int addressBookDeletePerson(AddressBook *addrBook)
 {
+    printf("请输入要删除联系人的姓名:\n");
+    char name[BUFFER_SIZE];
+    scanf("%s", name);
     BookNode *personNode = baseNameSeekPerson(addrBook, name);
     deleteCurrentNode(personNode);
 
@@ -189,63 +192,6 @@ int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
 {
-/*选择排序*/
-#if 0
-
-    BookNode *minIndex = addrBook->head;
-    for (BookNode *pos = addrBook->head->next; pos != NULL; pos = pos->next)
-    {
-        PersonData *minValue = pos->person;
-        for (BookNode *begin = pos->next; begin != NULL; begin = begin->next)
-        {
-            if (strcmp(minValue->name, begin->person->name) > 0)
-            {
-                memset(minValue->name, 0, sizeof(minValue->name));
-                strcpy(minValue->name, begin->person->name);
-                minIndex = begin;
-            }
-        }
-        if (strcmp(pos->person->name, minValue->name) < 0)
-        {
-            swapPersonData(pos->person, minValue);
-        }
-    }
-
-#endif
-#if 0
-    BookNode *minIndex = NULL;
-    for (BookNode *pos = addrBook->head; pos != NULL; pos = pos->next)
-    {
-        PersonData *minValue = pos->person;
-        minIndex = pos;
-        for (BookNode *begin = pos->next; begin != NULL; begin = begin->next)
-        {
-            if (strcmp(minValue->name, begin->person->name) > 0)
-            {
-                minValue = begin->person;
-                minIndex = begin;
-            }
-        }
-        if (minIndex != pos)
-        {
-            swapPersonData(pos->person, minIndex->person);
-        }
-    }
-#endif
-#if 0
-
-    for (int idx = 0; idx < addrBook->len - 1; idx++)
-    {
-        for (BookNode *jdx = addrBook->head->next->next; jdx->next != NULL; jdx = jdx->next)
-        {
-            if (strcmp(jdx->person->name, jdx->prev->person->name) > 0)
-            {
-                swapPersonData(jdx->person, jdx->prev->person);
-            }
-        }
-    }
-
-#endif
 #if 1
     for (int idx = 0; idx < addrBook->len - 1; idx++)
     {
