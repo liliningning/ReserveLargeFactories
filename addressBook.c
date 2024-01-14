@@ -143,7 +143,7 @@ int addressBookSeekPhone(AddressBook *addrBook, char *name)
 
 }
 /*修改某人信息*/
-int addressBookModify(AddressBook *addrBook, char *name)
+int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 {
 
 }
