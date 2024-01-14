@@ -3,28 +3,31 @@
 
 enum STATUS_CODE
 {
-    ADD = 1,
+    EXIT,
+    ADD ,
     SEEK,
     MODIFY,
     DELETE,
-    SAVE,
+    SORT,
     DERTRUCTION,
+    PRINTF,
 
 };
 
 void menu()
 {
-    printf("     ********************************                   \n");
+    printf("**************************** \n");
     printf("                        \n");
     printf("    1:添加联系人         \n");
     printf("    2:查找联系人         \n");
     printf("    3:修改联系人         \n");
     printf("    4:删除联系人         \n");
-    printf("    5:保存联系人         \n");
+    printf("    5:通过名字将联系人排序\n");
     printf("    6:销毁通讯录         \n");
-    printf(" 7:推出")
+    printf("    7:打印通讯录         \n");
+    printf("    0:退出通讯录         \n");
     printf("                        \n");
-    printf("     ********************************                   \n");
+    printf("**************************** \n");
 }
 
 int main()
@@ -67,15 +70,23 @@ int main()
             addressBookDeletePerson(book, name);
             break;
         }
-        case SAVE:
+        case SORT:
         {
-
+                addressBookSort(book);
             break;
         }
         case DERTRUCTION:
         {
             ruinAddressBook(book);
             break;
+        }
+        case PRINTF:
+        {
+            addressBookPrint(book);
+        }
+        case EXIT:
+        {
+
         }
         }
     }while(choice);

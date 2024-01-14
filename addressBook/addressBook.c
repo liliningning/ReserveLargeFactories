@@ -87,6 +87,7 @@ static int addressBookPosAddPerson(AddressBook *addrBook, PersonData person, int
     /*长度增加*/
     addrBook->len++;
     printf("新增联系人成功！\n");
+    printf("\n");
     return ON_SUCCESS;
 }
 
@@ -160,6 +161,7 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name)
 {
     checkBook(addrBook);
     BookNode *travelNode = addrBook->head->next;
+    
     printf("请输入要删除的人的姓名：\n");
     scanf("%s", name);
     while (travelNode != NULL && strcmp(travelNode->person->name, name) != 0)
@@ -171,6 +173,7 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name)
     {
         
         printf("联系人不存在 ! \n");
+        printf("\n");
         return INVALID_NAME;
     }
     else
@@ -178,6 +181,7 @@ int addressBookDeletePerson(AddressBook *addrBook, char *name)
         deleteCurrentNode(travelNode);
     }
     printf("删除联系人成功 ! \n");
+    printf("\n");
 
     return ON_SUCCESS;
 }
@@ -190,6 +194,7 @@ int addressBookSeekPhone(AddressBook *addrBook, char *name)
        if(node == NULL)
        {
             printf("要查找的人不存在 !\n");
+            printf("\n");
        }
        else
        {
@@ -205,6 +210,7 @@ int addressBookModify(AddressBook *addrBook, char *name)
     
 
 }
+#if 0
 /*按照名字给通讯录联系人排序*/
 int addressBookSort(AddressBook *addrBook)
 {
@@ -236,6 +242,7 @@ int addressBookSort(AddressBook *addrBook)
     travelNode = travelNode->next;
     return ON_SUCCESS;
 }
+#endif
 /*打印通讯录*/
 void addressBookPrint(AddressBook *addrBook)
 {
@@ -244,15 +251,18 @@ void addressBookPrint(AddressBook *addrBook)
     if (travelNdoe == NULL)
     {
         printf("The address book is empty.\n");
+        printf("\n");
+
         return;
     }
     while (travelNdoe != NULL)
     {
-        printf("name=%s\nsex=%c\nage=%d\nphone=%s\naddrs=%s\n", travelNdoe->person->name, travelNdoe->person->sex, travelNdoe->person->age, travelNdoe->person->phone, travelNdoe->person->addrs);
+        printf("name=%s\nsex=%c\nage=%d\nphone=%s\naddrs=%s\n", 
+        travelNdoe->person->name, travelNdoe->person->sex, travelNdoe->person->age, travelNdoe->person->phone, travelNdoe->person->addrs);
         travelNdoe = travelNdoe->next;
         printf("\n");
     }
-    printf("\n");
+    printf("%-20s\t%-4s\t%-5s\t%-12s\t%-20s\n", "名字", "性别","年龄", "电话", "地址");
 }
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook)
