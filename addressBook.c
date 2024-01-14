@@ -21,7 +21,28 @@ static int deleteCurrentNode(BookNode *deleteNode);
 static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name);
 /*交换数据*/
 static int swapPersonData(PersonData *man1, PersonData *man2);
+
+//获取通讯录长度/
+static int  addressBookGetLength(AddressBook *addrBook, int *size);
 /*****************************静态函数实现*************************************/
+
+//获取通讯录长度/
+   static int  addressBookGetLength(AddressBook *addrBook, int *size)
+{
+    int ret = 0;
+    if (addrBook == NULL)
+    {
+        return NULL_PTR;
+    }
+
+    if (size)
+    {
+        *size = addrBook->len;
+    }
+    /* 返回通讯录的长度 */
+    return addrBook->len;
+}
+
 static int checkBook(AddressBook *addrBook)
 {
     if (addrBook == NULL)
@@ -187,6 +208,26 @@ char *addressBookSeekPhone(AddressBook *addrBook, char *name)
 /*修改某人信息*/
 int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
 {
+    int ret = 0; // 默认返回修改
+
+    printf("请输入要修改人的名字!\n");
+    scanf("%s", name);
+    BookNode *travePoint = addrBook->head;
+    while (travePoint != NULL)
+    {
+        if (strcmp(travePoint->person->name, name) == 0)
+        {
+            strcpy(travePoint->person->name, person.name);
+            travePoint->person->sex = person.sex;
+            travePoint->person->age = person.age;
+            strcpy(travePoint->person->phone, person.phone);
+            strcpy(travePoint->person->addrs, person.addrs);
+            return 1;
+        }
+        travePoint = travePoint->next;
+    }
+    printf("修改成功!\n");
+    return ret;
 }
 
 /*按照名字给通讯录联系人排序*/
@@ -224,7 +265,37 @@ void addressBookPrint(AddressBook *addrBook)
     }
     printf("\n");
 }
+
+
+
+
+
+
+
+
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook)
 {
+    int ret = 0;
+    int size = 0;
+    BookNode *travelNode=addrBook->head->next;
+    BookNode *temp=NULL;
+    while(addressBookGetLength (addrBook, &size))
+    {
+        temp=travelNode;
+        deleteCurrentNode(temp);
+        travelNode=travelNode->next;
+    }
+    if (addrBook->head != NULL)
+    {
+        free(addrBook->head);
+        addrBook->head = NULL;
+    }
+    if (addrBook!= NULL)
+    {
+        free(addrBook);
+        addrBook=NULL;
+    }
+    
+    return ret;
 }

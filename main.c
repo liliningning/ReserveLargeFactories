@@ -1,66 +1,118 @@
 #include "addressBook.h"
 #include <stdio.h>
-#include <string.h>
-BookNode *baseNameSeekPerson1(AddressBook *addrBook, char *name)
+
+enum STATUS_CODE
 {
-    BookNode *travleNode = addrBook->head->next;
-    while (travleNode != NULL && strcmp(travleNode->person->name, name) != 0)
-    {
-        travleNode = travleNode->next;
-    }
-    if (travleNode == NULL)
-    {
-        return NULL;
-    }
-    return travleNode;
-}
-#if 1
-int swapNode1(AddressBook *addrBook, BookNode *preNode, BookNode *postNode)
+    EXIT,
+    ADD ,
+    SEEK,
+    MODIFY,
+    DELETE,
+    SORT,
+    DERTRUCTION,
+    PRINTF,
+
+};
+
+void menu()
 {
-    if (preNode == NULL || postNode == NULL)
-    {
-        return -1;
-    }
-    // 更新前后节点的前后指针
-    BookNode *prePrev = preNode->prev;   // head
-    BookNode *postNext = postNode->next; // null
-    if (prePrev == addrBook->head)
-    {
-        addrBook->head->next = postNode;
-    }
-    else
-    {
-        prePrev->next = postNode;
-    }
-
-    preNode->prev = postNode;
-    postNode->next = preNode;
-    preNode->next = postNext;
-    postNode->prev = prePrev;
-
-#if 1
-
-#endif
-
-    if (postNext != NULL)
-    {
-        postNext->prev = preNode;
-    }
-    return 1;
+    printf("**************************** \n");
+    printf("                        \n");
+    printf("    1:添加联系人         \n");
+    printf("    2:查找联系人         \n");
+    printf("    3:修改联系人         \n");
+    printf("    4:删除联系人         \n");
+    printf("    5:通过名字将联系人排序\n");
+    printf("    6:销毁通讯录         \n");
+    printf("    7:打印通讯录         \n");
+    printf("    0:退出通讯录         \n");
+    printf("                        \n");
+    printf("**************************** \n");
 }
-#endif
 
 int main()
 {
+
+    /* 初始化 */
     AddressBook *book = NULL;
     addressBookInit(&book);
 
-    addressBookAddPerson(book);
-    addressBookAddPerson(book);
-    // addressBookAddPerson(book);
+    char *name = NULL;
+    PersonData newpson = {0};
+    int choice = 0;
+
+    do
+    {
+
+        menu();
+        printf("请输入你的选项: \n");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case ADD:
+        {
+            addressBookAddPerson(book);
+            break;
+        }
+        case SEEK:
+        {
+            addressBookSeekPhone(book, name);
+            break;
+        }
+        case MODIFY:
+        {
+            addressBookModify(book, name, newpson);
+            break;
+        }
+        case DELETE:
+        {
+            addressBookDeletePerson(book);
+            break;
+        }
+        case SORT:
+        {
+                addressBookSort(book);
+            break;
+        }
+        case DERTRUCTION:
+        {
+            ruinAddressBook(book);
+            break;
+        }
+        case PRINTF:
+        {
+            addressBookPrint(book);
+        }
+        case EXIT:
+        {
+
+        }
+        }
+    }while(choice);
+
+
+
+
+
+    // printf("add person li\n");
+    // PersonData newPerson2 = {"lining", 'w', 18, "10086", "伊犁师范大学"};
+    // addressBookAddPerson(book, newPerson2);
+
+    // printf("add person an\n");
+    // PersonData newPerson1 = {"anzhenyu", 'm', 18, "12138", "皖江工学院"};
+    // addressBookAddPerson(book, newPerson1);
+
     // addressBookSort(book);
-    addressBookDeletePerson(book);
-    addressBookPrint(book);
+
+    // addressBookPrint(book);
+
+    // // printf("delete person an\n");
+    // // addressBookDeletePerson(book, "anzhenyu");
+    // // addressBookPrint(book);
+
+    // // char *zhenyuPhone = addressBookSeekPhone(book, "anzhenyu");
+    // // printf("zhenyuPhone=%s\n", zhenyuPhone);
 
     return 0;
 }
