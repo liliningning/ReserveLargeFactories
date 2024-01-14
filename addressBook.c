@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 enum STATUS_CODE
 {
     CALLLOC_ERROR = -5,
@@ -22,12 +23,12 @@ static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name);
 /*交换数据*/
 static int swapPersonData(PersonData *man1, PersonData *man2);
 
-//获取通讯录长度/
-static int  addressBookGetLength(AddressBook *addrBook, int *size);
+// 获取通讯录长度/
+static int addressBookGetLength(AddressBook *addrBook, int *size);
 /*****************************静态函数实现*************************************/
 
-//获取通讯录长度/
-   static int  addressBookGetLength(AddressBook *addrBook, int *size)
+// 获取通讯录长度/
+static int addressBookGetLength(AddressBook *addrBook, int *size)
 {
     int ret = 0;
     if (addrBook == NULL)
@@ -128,16 +129,25 @@ static int deleteCurrentNode(BookNode *deleteNode)
 }
 static BookNode *baseNameSeekPerson(AddressBook *addrBook, char *name)
 {
-    BookNode *travleNode = addrBook->head->next;
-    while (travleNode != NULL && strcmp(travleNode->person->name, name) != 0)
+    // 检查通讯录是否有效
+    checkBook(addrBook);
+
+    // 开始遍历通讯录，从头节点的下一个节点开始
+    BookNode *travelNode = addrBook->head->next;
+    while (travelNode != NULL)
     {
-        travleNode = travleNode->next;
+        // 比较节点中的姓名与目标姓名
+        if (strcmp(travelNode->person->name, name) == 0)
+        {
+            // 如果找到匹配的姓名，返回对应的节点
+            return travelNode;
+        }
+        // 继续遍历下一个节点
+        travelNode = travelNode->next;
     }
-    if (travleNode == NULL)
-    {
-        return NULL;
-    }
-    return travleNode;
+
+    // 遍历完整个通讯录仍未找到匹配的姓名，返回空指针
+    return NULL;
 }
 #if 1
 static int swapPersonData(PersonData *man1, PersonData *man2)
@@ -194,39 +204,56 @@ int addressBookDeletePerson(AddressBook *addrBook)
     BookNode *personNode = baseNameSeekPerson(addrBook, name);
     deleteCurrentNode(personNode);
 
+    printf("删除成功！\n");
+    sleep(1);
+
     return ON_SUCCESS;
 }
 /*通过名字查找电话号码*/
-char *addressBookSeekPhone(AddressBook *addrBook, char *name)
+int addressBookSeekPhone(AddressBook *addrBook, char *name)
 {
     checkBook(addrBook);
     BookNode *personNode = baseNameSeekPerson(addrBook, name);
     char *ret = calloc(BUFFER_SIZE, sizeof(char));
     strncpy(ret, personNode->person->phone, sizeof(ret) - 1);
-    return ret;
+    printf("phone:%s\n", ret);
+    sleep(1);
+    return ON_SUCCESS;
 }
 /*修改某人信息*/
-int addressBookModify(AddressBook *addrBook, char *name, PersonData person)
+int addressBookModify(AddressBook *addrBook, char *name)
 {
     int ret = 0; // 默认返回修改
 
-    printf("请输入要修改人的名字!\n");
-    scanf("%s", name);
-    BookNode *travePoint = addrBook->head;
+    BookNode *travePoint = addrBook->head->next;
     while (travePoint != NULL)
     {
         if (strcmp(travePoint->person->name, name) == 0)
         {
-            strcpy(travePoint->person->name, person.name);
-            travePoint->person->sex = person.sex;
-            travePoint->person->age = person.age;
-            strcpy(travePoint->person->phone, person.phone);
-            strcpy(travePoint->person->addrs, person.addrs);
+            /*维护新节点*/
+            printf("请输入姓名：\n");
+            scanf("%s", travePoint->person->name);
+            getchar();
+
+            printf("请输入性别：\n");
+            scanf("%c", &travePoint->person->sex);
+
+            printf("请输入年龄:\n");
+            scanf("%d", &travePoint->person->age);
+
+            printf("请输入电话号码：\n");
+            scanf("%s", travePoint->person->phone);
+
+            printf("请输入地址：\n");
+            scanf("%s", travePoint->person->addrs);
+            printf("修改成功!\n");
+            sleep(1);
+
             return 1;
         }
         travePoint = travePoint->next;
     }
-    printf("修改成功!\n");
+
     return ret;
 }
 
@@ -266,36 +293,29 @@ void addressBookPrint(AddressBook *addrBook)
     printf("\n");
 }
 
-
-
-
-
-
-
-
 /*清空通讯录*/
 int ruinAddressBook(AddressBook *addrBook)
 {
     int ret = 0;
     int size = 0;
-    BookNode *travelNode=addrBook->head->next;
-    BookNode *temp=NULL;
-    while(addressBookGetLength (addrBook, &size))
+    BookNode *travelNode = addrBook->head->next;
+    BookNode *temp = NULL;
+    while (addressBookGetLength(addrBook, &size))
     {
-        temp=travelNode;
+        temp = travelNode;
         deleteCurrentNode(temp);
-        travelNode=travelNode->next;
+        travelNode = travelNode->next;
     }
     if (addrBook->head != NULL)
     {
         free(addrBook->head);
         addrBook->head = NULL;
     }
-    if (addrBook!= NULL)
+    if (addrBook != NULL)
     {
         free(addrBook);
-        addrBook=NULL;
+        addrBook = NULL;
     }
-    
+
     return ret;
 }
