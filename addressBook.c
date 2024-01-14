@@ -278,16 +278,31 @@ int addressBookSort(AddressBook *addrBook)
 void addressBookPrint(AddressBook *addrBook)
 {
     checkBook(addrBook);
-    BookNode *travelNdoe = addrBook->head->next;
-    if (travelNdoe == NULL)
+    if (addrBook == NULL)
+    {
+        printf("The address book is NULL.\n");
+        return;
+    }
+    if (addrBook->head == NULL)
     {
         printf("The address book is empty.\n");
         return;
     }
-    while (travelNdoe != NULL)
+    BookNode *travelNode = addrBook->head->next;
+    while (travelNode != NULL)
     {
-        printf("name=%s\nsex=%c\nage=%d\nphone=%s\naddrs=%s\n", travelNdoe->person->name, travelNdoe->person->sex, travelNdoe->person->age, travelNdoe->person->phone, travelNdoe->person->addrs);
-        travelNdoe = travelNdoe->next;
+        if (travelNode->person == NULL)
+        {
+            travelNode = travelNode->next;
+            continue;
+        }
+        printf("name=%s\nsex=%c\nage=%d\nphone=%s\naddrs=%s\n", 
+               travelNode->person->name, 
+               travelNode->person->sex, 
+               travelNode->person->age, 
+               travelNode->person->phone, 
+               travelNode->person->addrs);
+        travelNode = travelNode->next;
         printf("\n");
     }
     printf("\n");

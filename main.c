@@ -26,7 +26,7 @@ void menu()
     printf("    4:删除联系人         \n");
     printf("    5:通过名字将联系人排序\n");
     printf("    6:销毁通讯录         \n");
-    printf("    7:打印通讯录         \n");
+    printf("    7:查看通讯录         \n");
     printf("    0:退出通讯录         \n");
     printf("                        \n");
     printf("**************************** \n");
